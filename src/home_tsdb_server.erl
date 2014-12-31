@@ -12,6 +12,7 @@
 
 %% API
 -export([start_link/0,
+         aggregate/4,
          data/1,
          metrics/0,
          write/3]).
@@ -70,6 +71,10 @@ metrics() ->
 data(Metric) ->
     gen_server:call(?MODULE, {data, Metric}).
 
+aggregate(Metric, TS1, TS2, Opts) ->
+    gen_server:call(?MODULE, {aggregate, Metric, TS1, TS2, Opts}).
+
+
 %%--------------------------------------------------------------------
 %% @private
 %% @doc
@@ -84,6 +89,9 @@ data(Metric) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
+handle_call({aggregate, Metric, TS1, TS2, Opts}, _From, State=#state{dbref=DBRef}) ->
+    {ok, Data} = leveltsdb:aggregate(DBRef, Metric, TS1, TS2, <<"avg">>, Opts),
+    {reply, {ok, Data}, State};
 handle_call(metrics, _From, State=#state{dbref=DBRef}) ->
     {ok, Metrics} = leveltsdb:metrics(DBRef),
     {reply, {ok, Metrics}, State};

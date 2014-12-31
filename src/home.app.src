@@ -8,6 +8,8 @@
 		kernel,
 		stdlib,
         ranch,
+        cowboy,
+        jsx,
         leveltsdb
 	]},
 	{mod, {home_app, []}},
