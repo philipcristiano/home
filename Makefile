@@ -19,6 +19,6 @@ release: clean app
 	./relx release
 
 package: release
-	fpm -s dir -t deb -n iot-home -v 0.1.0 _rel/home=/opt/home rel/init=/etc/init.d/iot-home
+	fpm -s dir -t deb -n iot-home -v 0.1.0 _rel/home=/opt/ rel/init=/etc/init.d/iot-home
 
 include erlang.mk
