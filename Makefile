@@ -1,4 +1,7 @@
 PROJECT = home
+
+PKG_REVISION ?= $(shell git describe --tags)
+PKG_VERSION	?= $(shell git describe --tags | tr - .)
 ELEVELDB_VERSION = "1.1.0"
 export ELEVELDB_VERSION
 
@@ -16,6 +19,6 @@ release: clean app
 	./relx release
 
 package: release
-	./pkgx deb
+	fpm -s dir -t deb -n iot-home -v 0.1.0 _rel/home=/opt/home rel/init=/etc/init.d/iot-home
 
 include erlang.mk
