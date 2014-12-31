@@ -12,6 +12,8 @@
 
 %% API
 -export([start_link/0,
+         data/1,
+         metrics/0,
          write/3]).
 
 %% gen_server callbacks
@@ -62,6 +64,12 @@ init([]) ->
 write(Metric, TS, Value) ->
     gen_server:call(?MODULE, {write, Metric, TS, Value}).
 
+metrics() ->
+    gen_server:call(?MODULE, metrics).
+
+data(Metric) ->
+    gen_server:call(?MODULE, {data, Metric}).
+
 %%--------------------------------------------------------------------
 %% @private
 %% @doc
@@ -76,8 +84,16 @@ write(Metric, TS, Value) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
-handle_call({write, Metric, TS, Value}, _From, State) ->
+handle_call(metrics, _From, State=#state{dbref=DBRef}) ->
+    {ok, Metrics} = leveltsdb:metrics(DBRef),
+    {reply, {ok, Metrics}, State};
+handle_call({data, Metric}, _From, State=#state{dbref=DBRef}) ->
+    Acc = leveltsdb:fold_metric(DBRef, Metric, fun accumulate/2, []),
+    RAcc = lists:reverse(Acc),
+    {reply, {ok, RAcc}, State};
+handle_call({write, Metric, TS, Value}, _From, State=#state{dbref=DBRef}) ->
     io:format("Got one! ~p~n", [{Metric, TS, Value}]),
+    ok = leveltsdb:write(DBRef, Metric, TS, Value),
     {reply, ok, State};
 handle_call(_Request, _From, State) ->
     Reply = ok,
@@ -137,3 +153,6 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+
+accumulate({TS, Value}, Acc) ->
+    [{TS, Value} | Acc].
