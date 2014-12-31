@@ -1,0 +1,13 @@
+.eunit
+deps
+*.o
+*.beam
+*.plt
+db/
+/ebin/
+/apps/*/ebin/
+log/
+erl_crash.dump
+_rel/
+.erlang.mk.packages.v2
+/logs/
