@@ -7,7 +7,8 @@
 	{applications, [
 		kernel,
 		stdlib,
-        ranch
+        ranch,
+        leveltsdb
 	]},
 	{mod, {home_app, []}},
 	{env, []}
