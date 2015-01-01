@@ -90,7 +90,7 @@ aggregate(Metric, TS1, TS2, Opts) ->
 %% @end
 %%--------------------------------------------------------------------
 handle_call({aggregate, Metric, TS1, TS2, Opts}, _From, State=#state{dbref=DBRef}) ->
-    {ok, Data} = leveltsdb:aggregate(DBRef, Metric, TS1, TS2, <<"avg">>, Opts),
+    {ok, Data} = leveltsdb:aggregate(DBRef, Metric, TS1, TS2, <<"avg">>, [{aggregation, <<"avg">>}| Opts]),
     {reply, {ok, Data}, State};
 handle_call(metrics, _From, State=#state{dbref=DBRef}) ->
     {ok, Metrics} = leveltsdb:metrics(DBRef),

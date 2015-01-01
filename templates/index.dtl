@@ -1,0 +1,17 @@
+{% extends "base.dtl" %}
+
+{% block sidebar %}
+{% verbatim %}
+
+
+{% endverbatim %}
+
+{% endblock %}
+
+{% block content %}
+{% verbatim %}
+
+
+{% endverbatim %}
+{% endblock %}
+

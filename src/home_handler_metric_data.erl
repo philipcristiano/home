@@ -13,12 +13,12 @@ handle(Req, State) ->
     {TS2, _} = cowboy_req:qs_val(<<"until">>, Req, 86400),
     {Bucket, _} = cowboy_req:qs_val(<<"bucket_size">>, Req, <<"60">>),
     Aggregation = 60,
-    Data = home_tsdb_server:aggregate(Metric, TS1, TS2,
+    {ok,Data} = home_tsdb_server:aggregate(Metric, TS1, TS2,
                       [{bucket_size, erlang:binary_to_integer(Bucket)},
                        {aggregation, Aggregation}]),
 	{ok, Req2} = cowboy_req:reply(200, [
 		{<<"content-type">>, <<"application/json">>}
-	], jsx:encode([Data]), Req),
+	], jsx:encode([{data, Data}]), Req),
 	{ok, Req2, State}.
 
 terminate(_Reason, _Req, _State) ->
