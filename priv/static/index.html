@@ -8,16 +8,22 @@
 
 <div id="chart"></div>
 
-<script>
+<h3>Data!</h3>
+<div id="data"></div>
 
+<script>
+$(document).ready(function() {
 d3.json('/metrics/device.53ff6e066678505531492367.temp?from1420058803&until=2420059163', function(response) {
     var data = [];
     console.log(response);
     for (key in response.data) {
         var date = new Date(0);
+        var value = response.data[key];
         date.setSeconds(parseInt(key));
-        console.log(key, response.data[key]);
-        data.push({date: date, value: response.data[key]});
+        console.log(key, value);
+        data.push({date: date, value: value});
+        $("<p>" + date + " " + value + "</p>").appendTo("#data");
+
     }
     console.log(data);
     MG.data_graphic({
@@ -29,7 +35,7 @@ d3.json('/metrics/device.53ff6e066678505531492367.temp?from1420058803&until=2420
         target: '#chart',
         min_y_from_data: true,
     })
-})
+})});
 
 </script>
 
