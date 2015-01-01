@@ -10,7 +10,7 @@
 
 <script>
 
-d3.json('/metrics/device.53ff6e066678505531492367.temp?from1420058803&until=1420059163', function(response) {
+d3.json('/metrics/device.53ff6e066678505531492367.temp?from1420058803&until=2420059163', function(response) {
     var data = [];
     console.log(response);
     for (key in response.data) {
@@ -21,7 +21,7 @@ d3.json('/metrics/device.53ff6e066678505531492367.temp?from1420058803&until=1420
     }
     console.log(data);
     MG.data_graphic({
-        title: "UFO Sightings",
+        title: "Temperature",
         description: "Temperature",
         data: data,
         width: 650,
