@@ -18,7 +18,7 @@ stop(_State) ->
 start_cowboy() ->
     Dispatch = cowboy_router:compile([
         {'_', [{"/", home_handler_index, []},
-               {"/static/[...]", cowboy_static, {dir, "priv/static/"}},
+               {"/static/[...]", cowboy_static, {priv_dir, home, "static/"}},
                {"/metrics", home_handler_metrics, []},
                {"/metrics/:metric/", home_handler_metric_data, []}
         ]}
